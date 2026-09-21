@@ -1,0 +1,16 @@
+[
+    {
+        "amount": 100000.0,
+        "category": "Transport"
+    },
+    {
+        "amount": 200000.0,
+        "category": "Feeding",
+        "description": "Dinner and lunch"
+    },
+    {
+        "amount": 900000.0,
+        "category": "School fees",
+        "description": "School Fees for 1st semester"
+    }
+]
