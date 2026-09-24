@@ -1,8 +1,10 @@
 import json
 
+
 def save_expense(expenses):
     with open("expenses.json", "w") as file:
         json.dump(expenses, file, indent=4)
+
 
 def load_expense():
     try:
@@ -11,12 +13,14 @@ def load_expense():
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
+
 def total_by_category(expenses):
     totals = {}
     for exp in expenses:
         category = exp["category"]
         totals[category] = totals.get(category, 0) + exp["amount"]
     return totals
+
 
 def get_positive_amount(prompt):
     while True:
@@ -28,45 +32,34 @@ def get_positive_amount(prompt):
         except ValueError:
             print("Please enter a valid number.")
 
+
 def delete_expense(expenses):
     if not expenses:
         print("No expenses to delete.")
         return
 
-    while True:
+    while expenses:
         print("\n--- Delete Expense ---")
-        for index, exp in enumerate(expenses, 1):
-            print(f"{index}. Category: {exp['category']} | "
-                  f"Description: {exp.get('description', '')} | "
-                  f"Amount: ${exp['amount']:.2f}")
+        for i, exp in enumerate(expenses, 1):
+            print(
+                f"{i}. {exp['category']}: ${exp['amount']:.2f} ({exp.get('description', '')})"
+            )
 
-        answer = input("\nEnter the number to delete (or press 0 to cancel): ").strip()
+        choice = input("\nEnter number to delete (0 to cancel): ").strip()
+        if choice == "0":
+            break
 
-        if answer == "0":
-            print("Cancelled.")
-            return
-
-        try:
-            to_delete = int(answer) - 1
-        except ValueError:
-            print("Please enter a valid number.")
-            continue
-
-        if 0 <= to_delete < len(expenses):
-            removed = expenses.pop(to_delete)
+        if choice.isdigit() and 1 <= int(choice) <= len(expenses):
+            removed = expenses.pop(int(choice) - 1)
             save_expense(expenses)
-            print(f"Removed {removed['category']} expense of ${removed['amount']:.2f}")
+            print(f"Removed {removed['category']} (${removed['amount']:.2f}).")
         else:
-            print("Invalid item number.")
+            print("Invalid number. Try again.")
             continue
 
-        if not expenses:
-            print("No expenses left.")
-            return
+        if input("Delete another? (y/n): ").strip().lower() != "y":
+            break
 
-        again = input("Delete another? (y/n): ").strip().lower()
-        if again != "y":
-            return
 
 def Tracker():
     expenses = load_expense()
@@ -86,7 +79,9 @@ def Tracker():
             amount = get_positive_amount("Enter amount: ")
             category = input("Enter category: ").strip().title()
             description = input("Input your expense description: ").strip()
-            expenses.append({"amount": amount, "category": category, "description": description})
+            expenses.append(
+                {"amount": amount, "category": category, "description": description}
+            )
             save_expense(expenses)
             print("Expense added successfully!")
 
@@ -94,7 +89,7 @@ def Tracker():
             if not expenses:
                 print("No expenses found.")
             else:
-                total = sum(item['amount'] for item in expenses)
+                total = sum(item["amount"] for item in expenses)
                 print(f"\nTotal Expense: ${total:.2f}")
 
         elif choice == "3":
@@ -113,20 +108,23 @@ def Tracker():
                 print("\n--- Expense History ---")
                 total = 0
                 for index, exp in enumerate(expenses, 1):
-                    print(f"{index}. Category: {exp['category']} |  Description: {exp.get('description', '')} | Amount: ${exp['amount']:.2f}")
+                    print(
+                        f"{index}. Category: {exp['category']} |  Description: {exp.get('description', '')} | Amount: ${exp['amount']:.2f}"
+                    )
                     total += exp["amount"]
                 print("-" * 25)
-                print(f"Total Spent: ${total:.2f}")            
+                print(f"Total Spent: ${total:.2f}")
 
         elif choice == "5":
             delete_expense(expenses)
 
         elif choice == "6":
-            print("BYEBYE!")
+            print("BYEBYE👋👋👋!")
             break
 
         else:
             print("Invalid choice, try again.")
+
 
 if __name__ == "__main__":
     Tracker()

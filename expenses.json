@@ -1,9 +1,5 @@
 [
     {
-        "amount": 100000.0,
-        "category": "Transport"
-    },
-    {
         "amount": 200000.0,
         "category": "Feeding",
         "description": "Dinner and lunch"
