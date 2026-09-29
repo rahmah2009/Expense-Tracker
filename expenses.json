@@ -8,5 +8,10 @@
         "amount": 900000.0,
         "category": "School fees",
         "description": "School Fees for 1st semester"
+    },
+    {
+        "amount": 200000.0,
+        "category": "Feeding",
+        "description": "food(lunch & dinner)"
     }
 ]
