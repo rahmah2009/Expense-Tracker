@@ -86,3 +86,147 @@
 
 # if __name__ == "__main__":
 #   Tracker()
+
+
+import json
+
+
+def save_expense(expense):
+    with open("expenses.json", "w") as file:
+        return json.dump(expense, file, indent=4)
+
+
+def load_expense():
+    try:
+        with open("expenses.json", "r") as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+
+def total_by_category(expense):
+    totals = {}
+    for exp in expense:
+        category = exp["category"]
+        totals[category] = totals.get(category, 0) + exp["amount"]
+    return totals
+
+
+def get_positive_amount(prompt):
+    while True:
+        try:
+            val = float(input(prompt))
+            if val > 0:
+                return val
+            print("Amount must be greater than 0")
+        except ValueError:
+            print("please input a valid number")
+
+
+def delete_expense(expense):
+    if not expense:
+        print("No expense to delete")
+        return
+    while expense:
+        print("\n Delete expense")
+        for i, exp in enumerate(expense, 1):
+            print(
+                f"{i}. {exp['category']}: ${exp['amount']:.2f} ({exp.get('description', '')})"
+            )
+
+        choice = input("\nEnter number to delete(0 to cancel): ").strip()
+        if choice == "0":
+            break
+
+        if choice.isdigit() and 1 <= int(choice) <= len(expense):
+            removed = expense.pop(int(choice) - 1)
+            save_expense(expense)
+            print(f"Removed {removed['category']} (${removed['amount']:.2f})")
+
+        else:
+            print("invalid option. try again in the nearest future😂😂😂")
+
+        if input("Delete another? (y/n): ").strip().lower() != "y":
+            break
+
+
+def Tracker():
+    expense = load_expense()
+
+    while True:
+        print("\n Expense Tracker")
+        print("1. Add Expense")
+        print("2. View total expense")
+        print("3. View spending by cateory")
+        print("4. View Expense History")
+        print("5. Delete Expense History")
+        print("6. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            amount = get_positive_amount("Enter Amount: ")
+            category = input("Enter category: ").strip().title()
+            description = input("Input your expense description: ").strip()
+            expense.append(
+                {"amount": amount, "category": category, "description": description}
+            )
+            save_expense(expense)
+            print("Expense added successfully.")
+
+        elif choice == "2":
+            if not expense:
+                print("No expenses found")
+            else:
+                total = sum(item["amount"] for item in expense)
+                print(f"\n Total Expenses: ${total:.2f}")
+
+        elif choice == "3":
+            if not expense:
+                print("No expense found")
+            else:
+                print("\n spending by category")
+                for category, total in total_by_category(expense).items():
+                    print(f"{category}: ${total:.2f}")
+
+        elif choice == "4":
+            if not expense:
+                print("\n No expense found")
+            else:
+                print("\n Expense history")
+                total = 0
+                for index, exp in enumerate(expense, 1):
+                    print(
+                        f"{index}. Category: {exp['category']} | Description: {exp.get('description', '')} | Amount: ${exp['amount']:.2f}"
+                    )
+                    total += exp["amount"]
+                    print(f"Total Spent: ${total:.2f}")
+
+        elif choice == "6":
+            print("DEY GO")
+            break
+
+        elif choice == "5":
+            delete_expense(expense)
+
+        else:
+            print("invalid choice")
+
+
+if __name__ == "__main__":
+    Tracker()
+
+# # # Write a Python program that asks the user for 5 expenses and prints the largest expense.
+
+
+# def expense():
+#     expenses = []
+
+#     for i in range(5):
+#         amount = float(input(f"Enter expense: "))
+#         expenses.append(amount)
+#     largest_expenses = max(expenses)
+#     print(f"The largest expense is: {largest_expenses}")
+
+
+# expense()

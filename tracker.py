@@ -35,7 +35,7 @@ def get_positive_amount(prompt):
 
 def delete_expense(expenses):
     if not expenses:
-        print("No expenses to delete.")
+        print("No expenses to delete😥😥.")
         return
 
     while expenses:
@@ -54,7 +54,7 @@ def delete_expense(expenses):
             save_expense(expenses)
             print(f"Removed {removed['category']} (${removed['amount']:.2f}).")
         else:
-            print("Invalid number. Try again.")
+            print("Invalid option. Try again.")
             continue
 
         if input("Delete another? (y/n): ").strip().lower() != "y":
@@ -123,6 +123,7 @@ def Tracker():
             break
 
         else:
+            # print("U dey blind yunno see say the number range na from 1 - 6 ode getat")
             print("Invalid choice, try again.")
 
 
